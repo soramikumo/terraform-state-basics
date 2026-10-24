@@ -12,7 +12,7 @@ Zenn の記事「本当にTerraformを理解している？」で使った検証
 |---|---|
 | [main.tf](main.tf) | `out/hello.txt` を作る `local_file` だけ |
 | [add/slow.tf](add/slow.tf) | 15秒かかるリソース。ロックの章で使う |
-| [secret/main.tf](secret/main.tf) | `random_password` だけ。機密の章で使う |
+| [secret/main.tf](secret/main.tf) | `sensitive = true` の変数を渡すだけ。機密の章で使う |
 
 `main.tf` には backend を書いていません。そのため既定の local backend になり、state は同じディレクトリの `terraform.tfstate` に入ります。
 
@@ -51,8 +51,9 @@ terraform apply   # 2つのターミナルで同時に
 
 ```sh
 cd secret
-terraform init && terraform apply
-grep '"result"' terraform.tfstate
+terraform init
+terraform apply -var 'db_password=demo-pass-1234'
+grep demo-pass terraform.tfstate
 ```
 
 `terraform.tfstate` は `.gitignore` で外しています。`secret/` の state にはパスワードが平文で入るためです。

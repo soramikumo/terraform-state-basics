@@ -1,12 +1,9 @@
-terraform {
-  required_providers {
-    random = {
-      source  = "hashicorp/random"
-      version = "3.7.2"
-    }
-  }
+variable "db_password" {
+  type      = string
+  sensitive = true
 }
 
-resource "random_password" "db" {
-  length = 16
+# 実際はDBのパスワード欄などに渡す
+resource "terraform_data" "db" {
+  input = var.db_password
 }
